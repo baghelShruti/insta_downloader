@@ -26,7 +26,7 @@ const HeroSection = ({ onDownload }) => {
     }
   };
 
-  const handleDownload = () => {
+  const handleDownload = async () => {
     if (!url.trim()) {
       toast({
         title: "URL Required",
@@ -47,11 +47,44 @@ const HeroSection = ({ onDownload }) => {
 
     setIsLoading(true);
     
-    // Simulate processing time
-    setTimeout(() => {
+    try {
+      const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+      const response = await fetch(`${BACKEND_URL}/api/instagram/process`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          url: url,
+          user_agent: navigator.userAgent
+        }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        toast({
+          title: "Processing Complete",
+          description: "Instagram content has been processed successfully!",
+        });
+        onDownload(result.data);
+      } else {
+        toast({
+          title: "Processing Failed",
+          description: result.message || "Failed to process Instagram URL. Please try again.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error('Download error:', error);
+      toast({
+        title: "Error",
+        description: "Network error. Please check your connection and try again.",
+        variant: "destructive",
+      });
+    } finally {
       setIsLoading(false);
-      onDownload(url);
-    }, 2000);
+    }
   };
 
   return (
