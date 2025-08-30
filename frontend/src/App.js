@@ -34,8 +34,8 @@ const Home = () => {
     helloWorldApi();
   }, []);
 
-  const handleDownload = (url) => {
-    setDownloadResult(url);
+  const handleDownload = (contentData) => {
+    setDownloadResult(contentData);
     // Scroll to result
     setTimeout(() => {
       const resultElement = document.getElementById('download-result');
