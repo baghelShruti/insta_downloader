@@ -58,7 +58,7 @@ const Home = () => {
         
         {downloadResult && (
           <div id="download-result" className="py-8 px-4 sm:px-6 lg:px-8 bg-gray-50">
-            <DownloadResult url={downloadResult} onClose={handleCloseResult} />
+            <DownloadResult contentData={downloadResult} onClose={handleCloseResult} />
           </div>
         )}
         
